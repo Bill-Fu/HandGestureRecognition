@@ -9,19 +9,42 @@ import org.opencv.ml.*;
 
 public class Test {
 	
-	private static final String[] pathsUniform = {"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\A\\uniform",
-			 									  "C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\B\\uniform",
-			 									  "C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\C\\uniform",
-			 									  "C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\Five\\uniform",
-			 									  "C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\V\\uniform",
-			 									  };
+	private static final String[] pathsUniform1 = {
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\A\\uniform",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\B\\uniform",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\C\\uniform",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\Five\\uniform",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\Point\\uniform",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\V\\uniform",
+	};
 	
-	private static final String[] pathsComplex = {"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\A\\complex",
-			 									  "C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\B\\complex",
-			 									  "C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\C\\complex",
-			 									  "C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\Five\\complex",
-			 									  "C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\V\\complex",
-			 									  };
+	private static final String[] pathsUniform2 = {
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\test\\A\\uniform",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\test\\B\\uniform",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\test\\C\\uniform",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\test\\Five\\uniform",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\test\\Point\\uniform",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\test\\V\\uniform",
+	};
+	
+	private static final String[] pathsComplex1 = {
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\A\\complex",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\B\\complex",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\C\\complex",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\Five\\complex",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\Point\\complex",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\test\\V\\complex",
+	};
+	
+	private static final String[] pathsComplex2 = {
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\test\\A\\complex",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\test\\B\\complex",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\test\\C\\complex",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\test\\Five\\complex",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\test\\Point\\complex",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\test\\V\\complex",
+	};
+	
 	
 	private static Mat testImages;
 	private static Mat testData;
@@ -105,7 +128,7 @@ public class Test {
 
 		loadModel();
 		
-		loadData(pathsComplex);
+		loadData(pathsComplex2);
 		
 		predict();
 	}

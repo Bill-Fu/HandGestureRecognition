@@ -9,12 +9,23 @@ import org.opencv.ml.*;
 
 public class Train {
 
-	private static final String[] paths = {"C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\A",
-			  							   "C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\B",
-			  							   "C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\C",
-			  							   "C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\Five",
-			  							   "C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\V",
-			  							   };
+	private static final String[] paths1 = {
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\A",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\B",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\C",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\Five",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\Point",
+			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\V",
+	};
+	
+	private static final String[] paths2 = {
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\train\\A",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\train\\B",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\train\\C",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\train\\Five",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\train\\Point",
+			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\train\\V",
+	};
 	
 	private static Mat trainingImages;
 	private static Mat trainingData;
@@ -41,8 +52,8 @@ public class Train {
 	
 	private static void loadData() {
 		
-		for (int i = 0; i < paths.length; ++i) {
-			for (File file : new File(paths[i]).listFiles()) {
+		for (int i = 0; i < paths2.length; ++i) {
+			for (File file : new File(paths2[i]).listFiles()) {
 				Mat img = new Mat();
 				img = Highgui.imread(file.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_GRAYSCALE);
 				
