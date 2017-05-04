@@ -18,7 +18,6 @@ public class HandFeatureExtraction {
 	private MatOfFloat descVals;
 	
 	public HandFeatureExtraction(HandDetection HD) {
-		
 		this.HD = HD;
 		desc = new HOGDescriptor();
 		descVals = new MatOfFloat();
@@ -26,7 +25,7 @@ public class HandFeatureExtraction {
 	
 	public MatOfFloat getDescVals() {
 		Mat grabbedImage = new Mat();
-		
+		//grabbedImage = HD.getDetectedHand();
 		Imgproc.cvtColor(HD.getDetectedHand(), grabbedImage, Imgproc.COLOR_BGR2GRAY);
 		Imgproc.resize(grabbedImage, grabbedImage, new Size(64,128));
 		
@@ -36,7 +35,6 @@ public class HandFeatureExtraction {
 	}
 	
 	public HandDetection getHD() {
-		
 		return HD;
 	}
 }

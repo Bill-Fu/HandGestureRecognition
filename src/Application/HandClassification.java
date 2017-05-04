@@ -13,18 +13,16 @@ public class HandClassification {
 	
 	private static final int Ges_A = 0;
 	private static final int Ges_B = 1;
-	private static final int Ges_C = 2;
-	private static final int Ges_Five = 3;
-	private static final int Ges_Point = 4;
-	private static final int Ges_V = 5;
+	private static final int Ges_Five = 2;
+	private static final int Ges_Point = 3;
+	private static final int Ges_V = 4;
 	
-	private static final String Gesture_A = "握拳手势";
-	private static final String Gesture_B = "Stop手势";
-	private static final String Gesture_C = "虎口手势";
-	private static final String Gesture_Five = "五指手势";
-	private static final String Gesture_Point = "上指手势";
-	private static final String Gesture_V = "胜利手势";
-	private static final String Gesture_Err = "错误手势";
+	private static final String Gesture_A = "Fist Gesture";
+	private static final String Gesture_B = "Stop Gesture";
+	private static final String Gesture_Five = "Five Gesture";
+	private static final String Gesture_Point = "Point Gesture";
+	private static final String Gesture_V = "Victory Gesture";
+	private static final String Gesture_Err = "Unknown Gesture";
 	
 	private HandFeatureExtraction HFE;
 	private CvSVM SVM;
@@ -55,8 +53,6 @@ public class HandClassification {
 				return Gesture_A;
 			case Ges_B:
 				return Gesture_B;
-			case Ges_C:
-				return Gesture_C;
 			case Ges_Five:
 				return Gesture_Five;
 			case Ges_Point:

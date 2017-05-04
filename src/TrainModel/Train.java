@@ -12,7 +12,6 @@ public class Train {
 	private static final String[] paths1 = {
 			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\A",
 			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\B",
-			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\C",
 			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\Five",
 			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\Point",
 			"C:\\Users\\fuhao\\Desktop\\dataset_clean\\train\\V",
@@ -21,7 +20,6 @@ public class Train {
 	private static final String[] paths2 = {
 			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\train\\A",
 			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\train\\B",
-			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\train\\C",
 			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\train\\Five",
 			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\train\\Point",
 			"C:\\Users\\wb-fh265231\\Dropbox\\graduation_project\\dataset_clean\\train\\V",

@@ -18,7 +18,7 @@ public class Camera {
 		
 		//default type is 0, it depends on your computer device settings, you can also add virtual camera for test
 		grabber = FrameGrabber.createDefault(type);
-
+		
 		grabber.start();
 		
 		curFrame = grabber.grab();
@@ -43,4 +43,5 @@ public class Camera {
 		
 		grabber.stop();
 	}
+	
 }
