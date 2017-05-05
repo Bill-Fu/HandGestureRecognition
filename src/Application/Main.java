@@ -18,7 +18,7 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
-		Camera Cam = new Camera(webCam);
+		Camera Cam = new Camera(virtualCam);
 		HandDetection HD = new HandDetection(Cam);
 		HandFeatureExtraction HFE = new HandFeatureExtraction(HD);
 		HandClassification HC = new HandClassification(HFE, "model.xml");
@@ -26,7 +26,8 @@ public class Main {
 		
 		while (UI.getCanvas().isVisible() && HD.getDetectedHand() != null) {
 			Cam.updateFrame();
-			UI.showFrame();
+			UI.showResult();
+			UI.showHandRegion();
 		}
 		
 		Cam.closeCamera();
