@@ -10,14 +10,16 @@ import org.opencv.objdetect.HOGDescriptor;
 import org.opencv.ml.*;
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_imgproc;
+import org.bytedeco.javacpp.opencv_video;
 import org.bytedeco.javacpp.opencv_core.Scalar;
 
 public class HandDetection {
 
 	private Camera Cam;
+
+	private opencv_video.BackgroundSubtractorKNN BGS;
 	
 	private opencv_core.Mat DetectedHand;
-	private opencv_core.Mat Background;
 	
 	private opencv_core.Mat hsvLower;
 	private opencv_core.Mat hsvUpper;
@@ -26,27 +28,32 @@ public class HandDetection {
 	
 	private opencv_core.Mat imgThreshed,imgThreshed2;
 	
+	private opencv_core.Mat foreground;
+	
 	private OpenCVFrameConverter.ToMat Frame2Mat;
 	
 	int height, width;
 	
 	public HandDetection(Camera Cam) {
-		Frame2Mat = new OpenCVFrameConverter.ToMat();
+		this.Frame2Mat = new OpenCVFrameConverter.ToMat();
 		this.Cam = Cam;
 		
-		this.DetectedHand = Frame2Mat.convert(Cam.getCurFrame());
+		//this.DetectedHand = Frame2Mat.convert(Cam.getCurFrame());
 		//opencv_imgproc.cvtColor(this.DetectedHand, this.DetectedHand,opencv_imgproc.CV_BGR2GRAY);
+		this.DetectedHand = Cam.getCurImg();
 		
-		// Set background
-		this.Background = Frame2Mat.convert(Cam.getCurFrame());
-		opencv_imgproc.cvtColor(this.Background, this.Background,opencv_imgproc.CV_BGR2GRAY);
+		this.BGS = opencv_video.createBackgroundSubtractorKNN();
+		//this.BGS = opencv_video.createBackgroundSubtractorMOG2();
 		
+		this.foreground = new opencv_core.Mat();
 		//Set HSV
 		setHSV(10,25,105,55,180,75);
 	}
 	
 	public Mat getDetectedHand() {
-		this.DetectedHand = Frame2Mat.convert(Cam.getCurFrame());
+		//this.DetectedHand = Frame2Mat.convert(Cam.getCurFrame());
+		this.DetectedHand = Cam.getCurImg();
+		
 		//opencv_imgproc.cvtColor(this.DetectedHand, this.DetectedHand,opencv_imgproc.CV_BGR2GRAY);
 		
 		return new Mat(this.DetectedHand.address());
@@ -56,22 +63,23 @@ public class HandDetection {
 		return this.Cam;
 	}
 	
-	public Mat getForegroundHand() {
-		opencv_core.Mat Img = Frame2Mat.convert(Cam.getCurFrame());
-		opencv_core.Mat Foreground = new opencv_core.Mat();
+	public opencv_core.Mat getForegroundHand() {
+		opencv_core.Mat Img = Cam.getCurImg();
 		
-		return new Mat(Foreground.address());
+		BGS.apply(Img, this.foreground);
+		
+		return this.foreground;
 	}
 	
-	
-	public opencv_core.Mat getHandArea() {
-		opencv_core.Mat Img = Frame2Mat.convert(Cam.getCurFrame());
+	public opencv_core.Mat getHSVHandArea() {
+		//opencv_core.Mat Img = Frame2Mat.convert(Cam.getCurFrame());
+		opencv_core.Mat Img = Cam.getCurImg();
 		
-		imgThreshed = new opencv_core.Mat(height,width,opencv_core.CV_8UC1);
-		imgThreshed2 = new opencv_core.Mat(height,width,opencv_core.CV_8UC1);
+		imgThreshed = new opencv_core.Mat(height,width,opencv_core.CV_8UC3);
+		imgThreshed2 = new opencv_core.Mat(height,width,opencv_core.CV_8UC3);
 		
 		opencv_imgproc.cvtColor(Img, Img, opencv_imgproc.CV_BGR2HSV);
-
+		
 		opencv_core.inRange(Img, hsvLower, hsvUpper, imgThreshed);
 		opencv_core.inRange(Img, hsvLower2, hsvUpper2, imgThreshed2);
 		opencv_core.add(imgThreshed,imgThreshed2,imgThreshed);
@@ -89,8 +97,10 @@ public class HandDetection {
 			huelower1=0;
 		}
 		
-		height = Frame2Mat.convert(Cam.getCurFrame()).rows();
-		width = Frame2Mat.convert(Cam.getCurFrame()).cols();
+		height = Cam.getCurImg().rows();
+		//height = Frame2Mat.convert(Cam.getCurFrame()).rows();
+		width = Cam.getCurImg().cols();
+		//width = Frame2Mat.convert(Cam.getCurFrame()).cols();
 
 		hsvLower = new opencv_core.Mat(height,width,opencv_core.CV_8UC3,new Scalar(huelower1, midS-varS, midV-varV,0));
 		hsvUpper = new opencv_core.Mat(height,width,opencv_core.CV_8UC3,new Scalar(midH+varH, midS+varS, midV+varV,0));

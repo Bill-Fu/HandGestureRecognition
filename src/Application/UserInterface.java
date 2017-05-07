@@ -6,25 +6,31 @@ import org.bytedeco.javacv.*;
 import org.opencv.core.*;
 
 public class UserInterface {
+	private HandClassification HC;
 	
 	private CanvasFrame canvasResult;
 	private CanvasFrame canvasHandRegion;
-	private HandClassification HC;
+	private CanvasFrame canvasForeground;
+	
 	private opencv_core.Mat resultImg;
 	private opencv_core.Mat handRegion;
+	private opencv_core.Mat foreground;
 	
 	public UserInterface(HandClassification HC) {
 		
 		this.HC = HC;
 		resultImg = new opencv_core.Mat();
-		canvasResult = new CanvasFrame("手势识别", CanvasFrame.getDefaultGamma()/HC.getHFE().getHD().getCam().getFrameGrabber().getGamma());
-		canvasHandRegion = new CanvasFrame("手部区域", CanvasFrame.getDefaultGamma()/HC.getHFE().getHD().getCam().getFrameGrabber().getGamma());
+		canvasResult = new CanvasFrame("手势识别");
+		canvasHandRegion = new CanvasFrame("手部区域");
+		canvasForeground = new CanvasFrame("手部前景");
 	}
 	
 	public void showResult() {
         OpenCVFrameConverter.ToMat converter = new OpenCVFrameConverter.ToMat();
         
-        resultImg = converter.convert(HC.getHFE().getHD().getCam().getCurFrame());
+        //resultImg = converter.convert(HC.getHFE().getHD().getCam().getCurFrame());
+        
+        resultImg = HC.getHFE().getHD().getCam().getCurImg();
         
 		putText(resultImg, HC.getGesture(), new opencv_core.Point(450, 20),CV_FONT_HERSHEY_COMPLEX,0.7,new opencv_core.Scalar(0,255,0,0));
 		
@@ -34,9 +40,17 @@ public class UserInterface {
 	public void showHandRegion() {
 		OpenCVFrameConverter.ToMat converter = new OpenCVFrameConverter.ToMat();
         
-		handRegion = HC.getHFE().getHD().getHandArea();
+		this.handRegion = HC.getHFE().getHD().getHSVHandArea();
 		
 		canvasHandRegion.showImage(converter.convert(handRegion));
+	}
+	
+	public void showForeground() {
+		OpenCVFrameConverter.ToMat converter = new OpenCVFrameConverter.ToMat();
+        
+		this.foreground = HC.getHFE().getHD().getForegroundHand();
+		
+		canvasForeground.showImage(converter.convert(foreground));
 	}
 	
 	public void closeFrame() {

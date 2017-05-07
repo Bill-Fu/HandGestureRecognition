@@ -3,6 +3,10 @@ package Application;
 import java.io.File;
 
 import org.bytedeco.javacv.*;
+import org.bytedeco.javacpp.opencv_videoio;
+import org.bytedeco.javacpp.opencv_core;
+import org.bytedeco.javacpp.opencv_video;
+import org.bytedeco.javacpp.opencv_videostab;
 import org.opencv.core.*;
 import org.opencv.imgproc.*;
 import org.opencv.highgui.*;
@@ -11,37 +15,28 @@ import org.opencv.ml.*;
 
 public class Camera {
 
-	private FrameGrabber grabber;
-	private Frame curFrame;
+	private opencv_videoio.VideoCapture capture;
+	private opencv_core.Mat curImg;
 	
 	public Camera(int type) throws Exception {
 		
-		//default type is 0, it depends on your computer device settings, you can also add virtual camera for test
-		grabber = FrameGrabber.createDefault(type);
+		// use VideoCapture to replace FrameGrabber to get Frame
+		this.curImg = new opencv_core.Mat();
+		this.capture = new opencv_videoio.VideoCapture(type);
 		
-		grabber.start();
+		this.capture.read(this.curImg);
 		
-		curFrame = grabber.grab();
 	}
 	
-	public void updateFrame() throws Exception {
-		
-		curFrame = grabber.grab();
-	}
-	
-	public Frame getCurFrame() {
-		
-		return curFrame;
-	}
-	
-	public FrameGrabber getFrameGrabber() {
-		
-		return grabber;
+	public opencv_core.Mat getCurImg() {
+
+		this.capture.read(curImg);
+		return curImg;
 	}
 	
 	public void closeCamera() throws Exception {
 		
-		grabber.stop();
+		capture.close();
 	}
 	
 }
