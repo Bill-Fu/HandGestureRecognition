@@ -29,7 +29,7 @@ public class Camera {
 	}
 	
 	public opencv_core.Mat getCurImg() {
-
+		
 		this.capture.read(curImg);
 		return curImg;
 	}

@@ -19,36 +19,15 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
-		Camera Cam = new Camera(webCam);
+		Camera Cam = new Camera(virtualCam);
 		HandDetection HD = new HandDetection(Cam);
 		HandFeatureExtraction HFE = new HandFeatureExtraction(HD);
 		HandClassification HC = new HandClassification(HFE, "model.xml");
 		UserInterface UI = new UserInterface(HC);
 		
-		
-		//----------------------Test----------------------
-		UI.showResult();
-		UI.showHandRegion();
-		//UI.showForeground();
-		
-		opencv_core.Mat tmpMat = HD.getHSVHandArea();
-		BytePointer Ptr;
-		
-		for (int i = 0; i < tmpMat.rows(); ++i) {
-			for (int j = 0; j< tmpMat.cols(); ++j) {
-				Ptr = tmpMat.ptr(i, j);
-				System.out.print(Ptr.get(0));
-			}
-		}
-			
-		//-------------------------------------------------
-			
-		while (UI.getCanvas().isVisible() && HD.getDetectedHand() != null) {
+		while (UI.getCanvas().isVisible()) {
+			HD.updateDetectedHand();
 			UI.showResult();
-			UI.showHandRegion();
-			//UI.showForeground();
-			//System.out.println("height: " + Cam.getCurImg().rows());
-			//System.out.println("width: " + Cam.getCurImg().cols());
 		}
 		
 		Cam.closeCamera();
