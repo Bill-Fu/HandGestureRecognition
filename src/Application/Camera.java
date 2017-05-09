@@ -19,23 +19,18 @@ public class Camera {
 	private opencv_core.Mat curImg;
 	
 	public Camera(int type) throws Exception {
-		
-		// use VideoCapture to replace FrameGrabber to get Frame
 		this.curImg = new opencv_core.Mat();
 		this.capture = new opencv_videoio.VideoCapture(type);
 		
 		this.capture.read(this.curImg);
-		
 	}
 	
 	public opencv_core.Mat getCurImg() {
-		
 		this.capture.read(curImg);
 		return curImg;
 	}
 	
 	public void closeCamera() throws Exception {
-		
 		capture.close();
 	}
 	

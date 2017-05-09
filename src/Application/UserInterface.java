@@ -28,20 +28,19 @@ public class UserInterface {
 	public void showResult() {
         OpenCVFrameConverter.ToMat converter = new OpenCVFrameConverter.ToMat();
         
-		opencv_core.Rect brect = HC.getHFE().getHD().getRect();
+		opencv_core.Rect rectROI = HC.getHFE().getHD().getRectROI();
         
         resultImg = HC.getHFE().getHD().getCam().getCurImg();
         
-		if(brect!=null) {
+		if(rectROI!=null) {
 			putText(resultImg, HC.getGesture(), new opencv_core.Point(450, 20),CV_FONT_HERSHEY_COMPLEX,0.7,new opencv_core.Scalar(0,255,0,0));
-			opencv_imgproc.rectangle(resultImg, brect, new opencv_core.Scalar(0, 255, 0, 0));
+			opencv_imgproc.rectangle(resultImg, rectROI, new opencv_core.Scalar(0, 255, 0, 0));
 		}
 		
 		canvasResult.showImage(converter.convert(resultImg));
-		
-
 	}
 	
+	// NOT USE NOW, FOR DEBUG HSV MODEL
 	public void showHandRegion() {
 		OpenCVFrameConverter.ToMat converter = new OpenCVFrameConverter.ToMat();
         
@@ -50,6 +49,7 @@ public class UserInterface {
 		canvasHandRegion.showImage(converter.convert(handRegion));
 	}
 	
+	// NOT USE NOW, FOR BACKGROUNDSUBTRACTORMOG2 USE
 	public void showForeground() {
 		OpenCVFrameConverter.ToMat converter = new OpenCVFrameConverter.ToMat();
         
@@ -64,7 +64,7 @@ public class UserInterface {
 	}
 	
 	public CanvasFrame getCanvas() {
-		
 		return canvasResult;
 	}
+	
 }

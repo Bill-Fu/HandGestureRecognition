@@ -19,7 +19,7 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
-		Camera Cam = new Camera(virtualCam);
+		Camera Cam = new Camera(webCam);
 		HandDetection HD = new HandDetection(Cam);
 		HandFeatureExtraction HFE = new HandFeatureExtraction(HD);
 		HandClassification HC = new HandClassification(HFE, "model.xml");
