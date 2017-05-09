@@ -19,7 +19,6 @@ public class UserInterface {
 	private opencv_core.Mat foreground;
 	
 	public UserInterface(HandClassification HC) {
-		
 		this.HC = HC;
 		resultImg = new opencv_core.Mat();
 		canvasResult = new CanvasFrame("手势识别");
