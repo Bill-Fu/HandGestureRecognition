@@ -71,6 +71,10 @@ public class HandDetection {
 		getContour();
 	}
 	
+	public void getROI() {
+		
+	}
+	
 	// Interface for HandFeatureExtraction ONLY
 	public Mat getDetectedHand() {
 		this.DetectedHand = Cam.getCurImg();
@@ -116,7 +120,7 @@ public class HandDetection {
 	private void getContour() {
 		opencv_core.RotatedRect maxBox;
 		opencv_core.Rect ROIRect;
-
+		
 		maxBox = findMaxContourRect();
 		ROIRect = findROIRect(maxBox, ROIRatio);
 		
