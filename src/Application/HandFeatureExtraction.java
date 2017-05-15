@@ -25,8 +25,9 @@ public class HandFeatureExtraction {
 	
 	public MatOfFloat getDescVals() {
 		Mat grabbedImage = new Mat();
+		HD.getDetectedHand().copyTo(grabbedImage);
 		
-		Imgproc.cvtColor(HD.getDetectedHand(), grabbedImage, Imgproc.COLOR_BGR2GRAY);
+		Imgproc.cvtColor(grabbedImage, grabbedImage, Imgproc.COLOR_BGR2GRAY);
 		Imgproc.resize(grabbedImage, grabbedImage, new Size(64,128));
 		
 		desc.compute(grabbedImage, descVals);

@@ -15,7 +15,7 @@ public class Main {
 	
 	private static final int virtualCam = 0;
 	private static final int webCam = 1;
-
+	
 	public static void main(String[] args) throws Exception {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		

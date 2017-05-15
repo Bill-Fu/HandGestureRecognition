@@ -45,7 +45,7 @@ public class HandClassification {
 		SVM.load(Model);
 	}
 	
-	private float getScore() {
+	public float getScore() {
 		return SVM.predict(HFE.getDescVals().reshape(1, 1));
 	}
 	
@@ -56,7 +56,7 @@ public class HandClassification {
 	public String getGesture() {
 		int curGesture = (int)getScore();
 		
-		switch(getStableGesture(curGesture)){
+		switch(curGesture){
 			case Ges_A:
 				return Gesture_A;
 			case Ges_B:
