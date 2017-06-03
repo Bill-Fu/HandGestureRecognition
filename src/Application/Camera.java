@@ -26,11 +26,11 @@ public class Camera {
 	}
 	
 	public opencv_core.Mat getCurImg() {
-		return curImg;
+		return this.curImg;
 	}
 	
 	public void updateCurImg() {
-		this.capture.read(curImg);
+		this.capture.read(this.curImg);
 	}
 	
 	public void closeCamera() throws Exception {

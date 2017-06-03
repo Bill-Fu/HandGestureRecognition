@@ -19,7 +19,7 @@ import org.bytedeco.javacpp.opencv_core.Scalar;
 public class HandDetection {
 
 	private static final float minDetectedArea = 1200.0f;
-	private static final float ROIRatio = 1.4f;
+	private static final float ROIRatio = 1.25f;
 	private static final String HAARModel = "palmCascadeClassifier.xml";
 	
 	private Camera Cam;
@@ -28,6 +28,7 @@ public class HandDetection {
 	private opencv_video.BackgroundSubtractorMOG2 BGS;
 	
 	private opencv_core.Mat DetectedHand;
+	private Mat DetectedHandNew;
 	
 	private opencv_core.Mat hsvLower;
 	private opencv_core.Mat hsvUpper;
@@ -36,9 +37,16 @@ public class HandDetection {
 	
 	private opencv_core.Mat imgThreshed,imgThreshed2;
 	
+	private opencv_core.Mat HSVImg;
+	private opencv_core.Mat HaarImg;
+	
+	private opencv_core.Mat handArea;
+	
 	private opencv_core.Mat foreground;
 	
 	private opencv_core.Mat kernel;
+	
+	private opencv_core.MatVector contours;
 	
 	private opencv_core.Rect ROI;
 	
@@ -52,10 +60,24 @@ public class HandDetection {
 	
 	private CascadeClassifier palmCascade;
 	
+	private opencv_core.RotatedRect maxBox;
+	private opencv_core.Rect ROIRect;
+	private opencv_core.Rect ROIRectNew;
+	
 	public HandDetection(Camera Cam) {
 		this.Cam = Cam;
 		
-		this.DetectedHand = Cam.getCurImg();
+		this.contours = new opencv_core.MatVector();
+		
+		this.DetectedHand = new opencv_core.Mat();
+		
+		this.HSVImg = new opencv_core.Mat();
+		this.HaarImg = new opencv_core.Mat();
+		this.handArea = new opencv_core.Mat();
+		
+		this.maxBox = null;
+		
+		Cam.getCurImg().copyTo(this.DetectedHand);
 		
 		// NOT USE NOW, FOR BACKGROUNDSUBTRACTOR USE
 		//this.BGS = opencv_video.createBackgroundSubtractorKNN();
@@ -84,6 +106,7 @@ public class HandDetection {
 		
 		this.palms = new opencv_core.RectVector();
 		
+		this.DetectedHandNew = new Mat();
 	}
 	
 	public opencv_core.Rect getHSVRectROI() {
@@ -97,12 +120,11 @@ public class HandDetection {
 	}
 	
 	public void getHaarROI() {
-		opencv_core.Mat Img = new opencv_core.Mat();
-		Cam.getCurImg().copyTo(Img);
+		Cam.getCurImg().copyTo(this.HaarImg);
 		
-		opencv_imgproc.cvtColor(Img, Img, opencv_imgproc.CV_BGR2GRAY);
+		opencv_imgproc.cvtColor(this.HaarImg, this.HaarImg, opencv_imgproc.CV_BGR2GRAY);
 		
-		palmCascade.detectMultiScale(Img, palms, 1.1, 2, opencv_objdetect.CV_HAAR_SCALE_IMAGE, new opencv_core.Size(40, 40), new opencv_core.Size(500, 500));
+		palmCascade.detectMultiScale(this.HaarImg, palms, 1.1, 2, opencv_objdetect.CV_HAAR_SCALE_IMAGE, new opencv_core.Size(80, 80), new opencv_core.Size(500, 500));
 	}
 	
 	public void setROI(opencv_core.Rect ROI) {
@@ -119,11 +141,15 @@ public class HandDetection {
 	
 	// Interface for HandFeatureExtraction ONLY
 	public Mat getDetectedHand() {
-		Cam.getCurImg().copyTo(DetectedHand);
+		//Cam.getCurImg().copyTo(this.DetectedHand);
+		
+		this.DetectedHand = Cam.getCurImg();
 		
 		this.DetectedHand = new opencv_core.Mat(DetectedHand, this.ROI);
 		
-		return new Mat(this.DetectedHand.address());
+		this.DetectedHandNew = new Mat(this.DetectedHand.address());
+		
+		return this.DetectedHandNew;
 	}
 	
 	public Camera getCam() {
@@ -131,13 +157,12 @@ public class HandDetection {
 	}
 	
 	public opencv_core.Mat getHSVHandArea() {
-		opencv_core.Mat Img = new opencv_core.Mat();
-		Cam.getCurImg().copyTo(Img);
+		Cam.getCurImg().copyTo(this.HSVImg);
 
-		opencv_imgproc.cvtColor(Img, Img, opencv_imgproc.CV_BGR2HSV);
+		opencv_imgproc.cvtColor(HSVImg, HSVImg, opencv_imgproc.CV_BGR2HSV);
 		
-		opencv_core.inRange(Img, hsvLower, hsvUpper, imgThreshed);
-		opencv_core.inRange(Img, hsvLower2, hsvUpper2, imgThreshed2);
+		opencv_core.inRange(HSVImg, hsvLower, hsvUpper, imgThreshed);
+		opencv_core.inRange(HSVImg, hsvLower2, hsvUpper2, imgThreshed2);
 		opencv_core.add(imgThreshed,imgThreshed2,imgThreshed);
 		
 		// erode and dilate operation, can be removed if need
@@ -161,8 +186,7 @@ public class HandDetection {
 	}
 	
 	private void getHSVROI() {
-		opencv_core.RotatedRect maxBox;
-		opencv_core.Rect ROIRect = null;
+		ROIRect = null;
 		
 		maxBox = findMaxContourRect();
 		if (maxBox != null) {
@@ -196,12 +220,10 @@ public class HandDetection {
 	private opencv_core.RotatedRect findMaxContourRect() {
 		float maxArea = minDetectedArea;
 		opencv_core.RotatedRect maxBox = null;
-		opencv_core.Mat handArea = new opencv_core.Mat();
-		opencv_core.MatVector contours = new opencv_core.MatVector();
 		
-		getHSVHandArea().copyTo(handArea);
+		getHSVHandArea().copyTo(this.handArea);
 		
-		opencv_imgproc.findContours(handArea, contours, opencv_imgproc.RETR_LIST, opencv_imgproc.CHAIN_APPROX_NONE);
+		opencv_imgproc.findContours(this.handArea, this.contours, opencv_imgproc.RETR_LIST, opencv_imgproc.CHAIN_APPROX_NONE);
 		
 		for (int i = 0; i < contours.size(); ++i) {
 			opencv_core.RotatedRect box = opencv_imgproc.minAreaRect(contours.get(i));
@@ -246,8 +268,8 @@ public class HandDetection {
 		int new_x = (int)(center_x - 0.5 * new_width);
 		int new_y = (int)(center_y - 0.5 * new_height);
 		
-		ROIRect = new opencv_core.Rect(new_x, new_y, new_width, new_height);
-	
-		return ROIRect;
+		this.ROIRectNew = new opencv_core.Rect(new_x, new_y, new_width, new_height);
+		
+		return this.ROIRectNew;
 	}
 }
